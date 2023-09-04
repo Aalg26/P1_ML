@@ -2,12 +2,24 @@ from fastapi import FastAPI
 import pandas as pd
 from fastapi.responses import HTMLResponse
 from collections import defaultdict
+import numpy as np
+import pickle
 
 df_user_data=pd.read_csv('dataset/df_user_data.csv')
 df_count_reviews=pd.read_csv('dataset/df_count_reviews.csv')
 df_user_genre=pd.read_csv('dataset/users_playtime_genre.csv')
 df_developer=pd.read_csv('dataset/df_developer.csv')
 sentiment=pd.read_csv('dataset/df_sentiment_analysis.csv')
+gustos_predichos_df=pd.read_csv('dataset/Matriz_recomendaciones.csv')
+itemsforuser=pd.read_csv('dataset/itemsforuser.csv')
+most_played=pd.read_csv('dataset/most_played_games.csv')
+
+with open('id_to_game_dict', 'rb') as archivo:
+    id_to_game = pickle.load(archivo)
+
+with open('id_to_genre_dict', 'rb') as archivo:
+    id_to_genre = pickle.load(archivo)
+
 
 app=FastAPI()
 
@@ -149,3 +161,37 @@ def sentiment_analysis(anio: int):
         return 'No hay reseñas para este año de lanzamiento'
     
     
+@app.get('/recomendacionusuario/{user_id}')
+def recomendacion_usuario( user_id ):
+    predicciones=gustos_predichos_df.set_index('user_id').loc[user_id]
+    top_generos=list(np.abs(predicciones).sort_values(ascending=False).index[:10])
+    juegos_comprados=itemsforuser[itemsforuser['user_id']==user_id]['item_id'].values[0]
+    #busco los mejores 3 juegos por cada genero en el top
+    juegos_recomendados=[]
+    contador=0
+    for genero in top_generos:
+
+        for index, row in most_played.iterrows():
+            #print(type(row['item_id']))
+            item_id=row['item_id']
+            genero_item=id_to_genre.get(item_id,'')
+            if genero in genero_item:
+                if not item_id in juegos_recomendados:
+                    juegos_recomendados.append(item_id)
+                contador+=1
+            if contador==3:
+                break
+        contador=0
+
+    #remuevo los juegos que el usuario ya tiene
+    for elemento in juegos_comprados:
+        if elemento in juegos_recomendados:
+            juegos_recomendados.remove(elemento)
+
+    top_5_juegos=juegos_recomendados[:5]
+
+    for i ,id in enumerate(top_5_juegos):
+        top_5_juegos[i]=id_to_game.get(id,'')
+
+        
+    return top_5_juegos
