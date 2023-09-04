@@ -14,10 +14,10 @@ gustos_predichos_df=pd.read_csv('dataset/Matriz_recomendaciones.csv')
 itemsforuser=pd.read_csv('dataset/itemsforuser.csv')
 most_played=pd.read_csv('dataset/most_played_games.csv')
 
-with open('id_to_game_dict', 'rb') as archivo:
+with open('dataset/id_to_game_dict', 'rb') as archivo:
     id_to_game = pickle.load(archivo)
 
-with open('id_to_genre_dict', 'rb') as archivo:
+with open('dataset/id_to_genre_dict', 'rb') as archivo:
     id_to_genre = pickle.load(archivo)
 
 
