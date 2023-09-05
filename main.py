@@ -66,8 +66,8 @@ def countreviews(fechas: str):
 
     # Filtrar el DataFrame para el rango de fechas deseado
     df_rango = df_count_reviews[(df_count_reviews['date'] >= fecha_inicio) & (df_count_reviews['date'] <= fecha_fin)]
-    devuelve=f'Entre esas dos fechas se publicaron revies de {len(df_rango['user_id'].unique())} usuarios distintos con un porcentaje de recomendacion de {round(df_rango['recommend'].mean()*100, 2)}%'
-    return 
+    devuelve=f'Entre esas dos fechas se publicaron revies de {len(df_rango["user_id"].unique())} usuarios distintos con un porcentaje de recomendacion de {round(df_rango["recommend"].mean()*100, 2)}'
+    return devuelve
 
 @app.get('/genre/{genero}')
 def genre(genero:str):
