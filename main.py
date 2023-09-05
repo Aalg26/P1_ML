@@ -25,7 +25,16 @@ app=FastAPI()
 
 @app.get('/')
 def message():
-    return 'Hello World'
+    return 'Hola bienvenido a la API: aqui estan los enlaces disponibles:\n
+    para la funcion userdata:https://p1-ml-render.onrender.com/userdata/#introduce aqui el user_id\n
+    para la funcion countreviews
+    para la funcion genre
+    para la funcion userforgenre
+    para la funcion developer
+    para la funcion sentiment_analysis
+    para la funcion
+    para la funcion
+    '
 
 @app.get('/userdata/{user_id}')
 def userdata(user_id: str):
