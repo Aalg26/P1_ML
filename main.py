@@ -25,12 +25,8 @@ app=FastAPI()
 
 @app.get('/')
 def message():
-    texto='Hola bienvenido a la API: aqui estan los enlaces disponibles:<br>
-    para la funcion userdata:https://p1-ml-render.onrender.com/userdata/#introduce aqui el user_id<br>
-    para la funcion countreviews<br>
-    para la funcion genre\npara la funcion userforgenre<br>
-    para la funcion developer<br>
-    para la funcion sentiment_analysis'
+    texto='Hola bienvenido a la API'
+    
     return texto
     
 
